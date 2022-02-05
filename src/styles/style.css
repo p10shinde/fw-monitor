@@ -1,0 +1,145 @@
+.miningCategory {
+  border: 1px solid transparent;
+  margin-top: 10px;
+  padding: 5px;
+  color: #fff;
+  background-color: #263238;
+  border-color: #b8daff;
+  display: flex;
+  align-items: center;
+}
+
+.tools {
+  font-weight: 600;
+  width: fit-content;
+  padding: 1px 3px 1px 3px;
+  border-radius: 4px;
+  background-color: #e0e0e0;
+  font-size: 0.675rem !important;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+.woodTools {
+  color: #61472c !important;
+  border: 1px solid #9a4e00;
+}
+
+.foodTools {
+  border: 1px solid #005892;
+  color: #00afe4;
+}
+
+.goldTools {
+  color: #6e6100 !important;
+  border: 1px solid #b9ab00;
+}
+
+/* Tool Items */
+.toolItem {
+  border: 1px solid #b19898;
+  box-shadow: 1px 2px 3px 1px #dfdede;
+  border-radius: 4px;
+  padding: 4px 8px 4px 8px !important;
+  margin-bottom: 10px;
+  background-color: #eeeeee;
+}
+
+.avatarCircle {
+  border-radius: 50%;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+}
+.woodAvatarCircle {
+  border: 1px solid #61472c;
+}
+
+.foodAvatarCircle {
+  border: 1px solid #005892;
+}
+
+.goldAvatarCircle {
+  border: 1px solid #6e6100;
+}
+
+.seedAvatarCircle {
+  border: 1px solid #6e6100;
+}
+
+/* FABTEXT */
+.fabText {
+  font-size: 0.675rem !important;
+  font-family: sans-serif !important;
+  font-weight: 800;
+}
+
+.accountTitle {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+/* Durability */
+.durabilityBadge {
+  background-color: #fbe840 !important;
+  color: #3c3c3c !important;
+  font-weight: 800 !important;
+  height: 15px !important;
+  margin-left: 10px !important;
+}
+
+/* Tool Timers */
+
+.toolTimer {
+  color: #fff !important;
+  font-weight: 800 !important;
+  height: 15px !important;
+  margin-top: 5px !important;
+  font-size: 0.9rem !important;
+}
+.safeToolTimer {
+  background-color: #4caf50 !important;
+  font-family: sans-serif !important;
+
+}
+
+.dangerToolTimer {
+  background-color: #f44336 !important;
+  font-family: sans-serif !important;
+}
+
+.soundOffButton {
+  cursor: pointer;
+  background: #e0e0e0;
+  padding: 4px 7px 0px 7px;
+  border-radius: 4px 
+}
+
+.alarming {
+  background: #f44336;
+}
+
+.alarm_activated {
+  background: #4caf50;
+}
+
+/* CROPS */
+.cropsDetails p {
+  font-family: sans-serif !important;
+  font-weight: 800;
+  width: fit-content;
+  padding: 1px 3px 1px 3px;
+  border-radius: 4px;
+  /* background-color: #e0e0e0; */
+  font-size: 0.675rem !important;
+  /* display: inline-block; */
+  color: #009688 !important;
+  border: 1px solid #607d8b;
+}
+
+.cropsDetails p span {
+  color: #ff9800;
+  font-weight: 500;
+}
