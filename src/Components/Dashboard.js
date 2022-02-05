@@ -52,7 +52,7 @@ function Dashboard() {
       <Container maxWidth="lg">
         <Grid container spacing={2} style={{ marginBottom: 10 }}>
           <Grid item xs={12}>
-            <Item>Heyy</Item>
+            <Item style={{fontSize: 30}}>Farmers World</Item>
           </Grid>
         </Grid>
         <Grid container spacing={2}>

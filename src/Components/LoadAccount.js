@@ -20,7 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default ({ isButtonClicked, updateApp, account }) => {
+const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
   const [isAnyToolTimedout, setIsAnyToolTimedout] = useState(false);
   const [isAnyCropTimedOut, setIsAnyCropTimedOut] = useState(false);
   const [isMining, setIsMining] = useState(true);
@@ -51,7 +51,8 @@ export default ({ isButtonClicked, updateApp, account }) => {
 
   useEffect(() => {
     if (isAnyToolTimedout) {
-      // if (account !== "irjau.wam") play();
+      // if (account !== "irjau.wam") 
+      play();
 
       setIsAnyToolTimedout(false);
       if (!isAccountMuted) {
@@ -60,13 +61,14 @@ export default ({ isButtonClicked, updateApp, account }) => {
     }
 
     if (isAnyCropTimedOut) {
-      // if (account !== "irjau.wam") play();
+      // if (account !== "irjau.wam") 
+      play();
       setIsAnyCropTimedOut(false);
       if (!isAccountMuted) {
         setIsPlaying(true);
       }
     }
-  }, [isAnyToolTimedout, isAnyCropTimedOut]);
+  }, [isAnyToolTimedout, isAnyCropTimedOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Item>
@@ -128,7 +130,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
           <div
             onClick={(item) => updateApp()}
             className={`normalButton`}
-            style={{ backgroundColor: "#00bcd4", color: 'white' }}
+            style={{ backgroundColor: "#00bcd4", color: "white" }}
           >
             <RefreshIcon />
           </div>
@@ -177,3 +179,4 @@ export default ({ isButtonClicked, updateApp, account }) => {
     </Item>
   );
 };
+export default LoadAccount;

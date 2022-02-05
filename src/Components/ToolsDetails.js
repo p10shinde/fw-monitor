@@ -72,7 +72,7 @@ const goldMembs = [
   goldDiamondTemplate,
 ];
 
-export default ({
+const ToolsDetails = ({
   isButtonClicked,
   updateToolTimeOut,
   account,
@@ -140,6 +140,7 @@ export default ({
                   foundGoldMemb.template_name.split(" ")[0].toUpperCase()
                 ] += 1;
               }
+              return 1
             });
           }
         });
@@ -192,7 +193,8 @@ export default ({
               if (tool.type.toLowerCase() === "wood") {
                 dt = new Date(
                   new Date(tool.next_availability * 1000).setHours(
-                    new Date(tool.next_availability * 1000).getHours() + 4
+                    new Date(tool.next_availability * 1000).getHours() +
+                      woodMembHours
                   )
                 );
               } else if (tool.type.toLowerCase() === "food") {
@@ -248,8 +250,8 @@ export default ({
       .catch((error) => {
         console.log(error);
       });
-  // }, [toolsLoaded, isButtonClicked]);
-  }, [toolsLoaded, isButtonClicked, isCurrentUserUpdateRequested]);
+    // }, [toolsLoaded, isButtonClicked]);
+  }, [toolsLoaded, isButtonClicked, isCurrentUserUpdateRequested]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -312,3 +314,5 @@ export default ({
     </div>
   );
 };
+
+export default ToolsDetails;
