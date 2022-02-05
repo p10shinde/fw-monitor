@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import LoadAccount from "./LoadAccount";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
 
 const DEFAULT_ACCOUNT = [
-  "4rfqu.wam",
+  // "4rfqu.wam",
+  // "irjau.wam",
   "wtqxo.wam",
   "uayjo.wam",
   ".c1.s.c.wam",
@@ -17,16 +20,19 @@ const DEFAULT_ACCOUNT = [
   "m4w2i.c.wam ",
   "w5v12.c.wam",
   "hrwmi.c.wam",
-]
+];
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 function Dashboard() {
-  const [accounts, 
-    // setAccounts
-  ] = useState(DEFAULT_ACCOUNT);
+  const [accounts] = useState(DEFAULT_ACCOUNT);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [refreshInterval, 
-    // setRefreshInterval
-  ] = useState(2000 * 60);
+  const [refreshInterval] = useState(2000 * 60);
   const myInterval = setInterval(() => {
     clearInterval(myInterval);
     setIsButtonClicked(!isButtonClicked);
@@ -44,8 +50,13 @@ function Dashboard() {
       }}
     >
       <Container maxWidth="lg">
+        <Grid container spacing={2} style={{ marginBottom: 10 }}>
+          <Grid item xs={12}>
+            <Item>Heyy</Item>
+          </Grid>
+        </Grid>
         <Grid container spacing={2}>
-          {accounts.map((account, index) => ( 
+          {accounts.map((account, index) => (
             <Grid item xs={12} key={index}>
               <LoadAccount
                 isButtonClicked={isButtonClicked}

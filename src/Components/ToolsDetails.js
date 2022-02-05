@@ -44,6 +44,13 @@ const foodDiamondTemplate = _.findWhere(FW_TEMPLATES, {
   template_id: 260641,
 });
 
+const foodMembs = [
+  foodBronzeTemplate,
+  foodSilverTemplate,
+  foodGoldTemplate,
+  foodDiamondTemplate,
+];
+
 // GOLD MEMBERSHIPS
 const goldBronzeTemplate = _.findWhere(FW_TEMPLATES, {
   template_id: 260642,
@@ -58,12 +65,20 @@ const goldDiamondTemplate = _.findWhere(FW_TEMPLATES, {
   template_id: 260648,
 });
 
+const goldMembs = [
+  goldBronzeTemplate,
+  goldSilverTemplate,
+  goldGoldTemplate,
+  goldDiamondTemplate,
+];
+
 export default ({
   isButtonClicked,
   updateToolTimeOut,
   account,
   stop,
   updateIsMining,
+  isCurrentUserUpdateRequested,
 }) => {
   const [dense] = React.useState(false);
   const [toolsDetails, setToolsDetails] = useState([]);
@@ -72,48 +87,62 @@ export default ({
   useEffect(() => {
     getMemberships(account)
       .then((membsData) => {
-        // uWM =
-        // console.log(membsData);
-        // console.log(woodMembs);
-        membsData.forEach((mem) => {
-          // console.log(mem.template_id);
-          const foundMemb = woodMembs.filter(
-            (memTemplate) => memTemplate.template_id === mem.template_id
-          )[0];
-          if (foundMemb) {
-            console.log(foundMemb);
-          }
-        });
-
-        // console.log(woodBronzeTemplate);
-        // console.log(woodSilverTemplate);
-
-        let membershipAvailable = [
+        let membershipData = [
           {
             type: "WOOD",
             tiers: {
-              BRONZE: 1,
-              SILVER: 2,
-              GOLD: 4,
+              BRONZE: 0,
+              SILVER: 0,
+              GOLD: 0,
             },
           },
           {
             type: "FOOD",
             tiers: {
-              BRONZE: 1,
-              SILVER: 2,
-              GOLD: 4,
+              BRONZE: 0,
+              SILVER: 0,
+              GOLD: 0,
             },
           },
           {
             type: "GOLD",
             tiers: {
-              BRONZE: 1,
-              SILVER: 2,
-              GOLD: 4,
+              BRONZE: 0,
+              SILVER: 0,
+              GOLD: 0,
             },
           },
         ];
+
+        membsData.forEach((mem) => {
+          // console.log(mem.template_id);
+          const foundWoodMemb = woodMembs.filter(
+            (memTemplate) => memTemplate.template_id === mem.template_id
+          )[0];
+          const foundFoodMemb = foodMembs.filter(
+            (memTemplate) => memTemplate.template_id === mem.template_id
+          )[0];
+          const foundGoldMemb = goldMembs.filter(
+            (memTemplate) => memTemplate.template_id === mem.template_id
+          )[0];
+          if (foundWoodMemb || foundFoodMemb || foundGoldMemb) {
+            membershipData.map((membership) => {
+              if (membership.type === foundWoodMemb?.type) {
+                membership.tiers[
+                  foundWoodMemb.template_name.split(" ")[0].toUpperCase()
+                ] += 1;
+              } else if (membership.type === foundFoodMemb?.type) {
+                membership.tiers[
+                  foundFoodMemb.template_name.split(" ")[0].toUpperCase()
+                ] += 1;
+              } else if (membership.type === foundGoldMemb?.type) {
+                membership.tiers[
+                  foundGoldMemb.template_name.split(" ")[0].toUpperCase()
+                ] += 1;
+              }
+            });
+          }
+        });
 
         getTools(account)
           .then((toolsData) => {
@@ -135,16 +164,51 @@ export default ({
 
               // Calculate next availability
               // let next_availability = tool.next_availability * 1000 - new Date();
-              let woodMembership = true;
               let dt;
-              if (woodMembership && tool.type.toLowerCase() === "wood") {
+              let woodMembHours = 0;
+              let foodMembHours = 0;
+              let goldMembHours = 0;
+              membershipData.forEach((membership) => {
+                if (membership.type === "WOOD") {
+                  woodMembHours +=
+                    membership.tiers.BRONZE * woodBronzeTemplate.saved_claims +
+                    membership.tiers.SILVER * woodSilverTemplate.saved_claims +
+                    membership.tiers.GOLD * woodGoldTemplate.saved_claims;
+                }
+                if (membership.type === "FOOD") {
+                  foodMembHours +=
+                    membership.tiers.BRONZE * foodBronzeTemplate.saved_claims +
+                    membership.tiers.SILVER * foodSilverTemplate.saved_claims +
+                    membership.tiers.GOLD * foodGoldTemplate.saved_claims;
+                }
+                if (membership.type === "GOLD") {
+                  goldMembHours +=
+                    membership.tiers.BRONZE * goldBronzeTemplate.saved_claims +
+                    membership.tiers.SILVER * goldSilverTemplate.saved_claims +
+                    membership.tiers.GOLD * goldGoldTemplate.saved_claims;
+                }
+              });
+
+              if (tool.type.toLowerCase() === "wood") {
                 dt = new Date(
                   new Date(tool.next_availability * 1000).setHours(
                     new Date(tool.next_availability * 1000).getHours() + 4
                   )
                 );
-              } else {
-                dt = new Date(new Date(tool.next_availability * 1000));
+              } else if (tool.type.toLowerCase() === "food") {
+                dt = new Date(
+                  new Date(tool.next_availability * 1000).setHours(
+                    new Date(tool.next_availability * 1000).getHours() +
+                      foodMembHours
+                  )
+                );
+              } else if (tool.type.toLowerCase() === "gold") {
+                dt = new Date(
+                  new Date(tool.next_availability * 1000).setHours(
+                    new Date(tool.next_availability * 1000).getHours() +
+                      goldMembHours
+                  )
+                );
               }
 
               let nxt_avlbl = dt - new Date();
@@ -182,9 +246,10 @@ export default ({
           });
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error);
       });
-  }, [toolsLoaded, isButtonClicked]);
+  // }, [toolsLoaded, isButtonClicked]);
+  }, [toolsLoaded, isButtonClicked, isCurrentUserUpdateRequested]);
 
   return (
     <div>

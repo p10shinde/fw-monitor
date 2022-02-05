@@ -10,6 +10,7 @@ import notifySfx from "../assets/sounds/finger.mp3";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import Tooltip from "@mui/material/Tooltip";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -27,6 +28,8 @@ export default ({ isButtonClicked, updateApp, account }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAccountMuted, setIsAccountMuted] = useState(false);
   const [isSoundStopped, setIsSoundStopped] = useState(false);
+  const [isCurrentUserUpdateRequested, setIsCurrentUserUpdateRequested] =
+    useState(false);
 
   const [play, { stop }] = useSound(notifySfx, {
     interrupt: true,
@@ -48,7 +51,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
 
   useEffect(() => {
     if (isAnyToolTimedout) {
-      if (account !== "4rfqu.wam") play();
+      // if (account !== "irjau.wam") play();
 
       setIsAnyToolTimedout(false);
       if (!isAccountMuted) {
@@ -57,7 +60,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
     }
 
     if (isAnyCropTimedOut) {
-      if (account !== "4rfqu.wam") play();
+      // if (account !== "irjau.wam") play();
       setIsAnyCropTimedOut(false);
       if (!isAccountMuted) {
         setIsPlaying(true);
@@ -75,7 +78,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
               setIsSoundStopped(!isSoundStopped);
               setIsPlaying(false);
             }}
-            className={`soundOffButton ${isPlaying ? "alarming" : ""}`}
+            className={`normalButton ${isPlaying ? "alarming" : ""}`}
           >
             <VolumeOffIcon />
           </div>
@@ -88,7 +91,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
                 setIsAccountMuted(false);
                 setNotifySound(0.5);
               }}
-              className={`soundOffButton`}
+              className={`normalButton`}
             >
               <VolumeMuteIcon />
             </div>
@@ -102,7 +105,7 @@ export default ({ isButtonClicked, updateApp, account }) => {
                 setNotifySound(0);
                 setIsPlaying(false);
               }}
-              className={`soundOffButton alarm_activated`}
+              className={`normalButton alarm_activated`}
             >
               <VolumeUpIcon />
             </div>
@@ -114,11 +117,22 @@ export default ({ isButtonClicked, updateApp, account }) => {
             size="small"
             color="primary"
             aria-label="account"
-            onClick={(item) => updateApp()}
+            onClick={(item) =>
+              setIsCurrentUserUpdateRequested(!isCurrentUserUpdateRequested)
+            }
           >
             {account}
           </Fab>
         </div>
+        <Tooltip title="Refresh All Accounts">
+          <div
+            onClick={(item) => updateApp()}
+            className={`normalButton`}
+            style={{ backgroundColor: "#00bcd4", color: 'white' }}
+          >
+            <RefreshIcon />
+          </div>
+        </Tooltip>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         {/* MINING */}
@@ -138,12 +152,12 @@ export default ({ isButtonClicked, updateApp, account }) => {
               stop={stop}
               account={account}
               updateIsMining={updateIsMining}
+              isCurrentUserUpdateRequested={isCurrentUserUpdateRequested}
             />
           </div>
         )}
         {/* CROPS */}
         <div style={{ flex: 2 }}>
-          {/* <div className="miningCategory">CROPS</div> */}
           <div>
             <div className="miningCategory">
               <div style={{ flex: 1, lineHeight: 2 }}>
