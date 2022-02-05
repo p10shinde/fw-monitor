@@ -110,7 +110,7 @@
   font-family: sans-serif !important;
 }
 
-.soundOffButton {
+.normalButton {
   cursor: pointer;
   background: #e0e0e0;
   padding: 4px 7px 0px 7px;
@@ -119,10 +119,12 @@
 
 .alarming {
   background: #f44336;
+  color: white;
 }
 
 .alarm_activated {
   background: #4caf50;
+  color: white;
 }
 
 /* CROPS */
