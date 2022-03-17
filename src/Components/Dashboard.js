@@ -19,7 +19,10 @@ import { getExchangeFees, getTokenPrices } from "../Actions/services";
 
 let DEFAULT_ACCOUNT = [];
 const FEE_UPDATE_DURATION = 1; // Fee gets updated every hour
-if (localStorage.getItem("ids") !== "") {
+if (
+  localStorage.getItem("ids") !== "" &&
+  localStorage.getItem("ids") !== null
+) {
   DEFAULT_ACCOUNT = JSON.parse(localStorage.getItem("ids"));
 } else {
   DEFAULT_ACCOUNT = [
