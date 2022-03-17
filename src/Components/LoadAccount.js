@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Fab from "@mui/material/Fab";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import ToolsDetails from "./ToolsDetails";
 import CropsDetails from "./CropsDetails";
+import TokenBalances from "./TokenBalances";
 import useSound from "use-sound";
-// import notifySfx from "../assets/sounds/siren.wav";
-import notifySfx from "../assets/sounds/finger.mp3";
+// import notifySfx from "../Assets/sounds/siren.wav";
+import notifySfx from "../Assets/sounds/finger.mp3";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Tooltip from "@mui/material/Tooltip";
+import EnergyIcon from "../Assets/images/energy.png";
+import { ReferenceDataContext } from "../Context/ReferenceDataContext";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -30,6 +33,7 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
   const [isSoundStopped, setIsSoundStopped] = useState(false);
   const [isCurrentUserUpdateRequested, setIsCurrentUserUpdateRequested] =
     useState(false);
+  const { accDetails, setAccDetails } = useContext(ReferenceDataContext);
 
   const [play, { stop }] = useSound(notifySfx, {
     interrupt: true,
@@ -51,7 +55,7 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
 
   useEffect(() => {
     if (isAnyToolTimedout) {
-      // if (account !== "irjau.wam") 
+      // if (account !== "irjau.wam")
       play();
 
       setIsAnyToolTimedout(false);
@@ -61,7 +65,7 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
     }
 
     if (isAnyCropTimedOut) {
-      // if (account !== "irjau.wam") 
+      // if (account !== "irjau.wam")
       play();
       setIsAnyCropTimedOut(false);
       if (!isAccountMuted) {
@@ -113,7 +117,29 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
             </div>
           </Tooltip>
         )}
-        <div style={{ flex: 1, lineHeight: 2 }}>
+        <div
+          style={{
+            flex: 1,
+            lineHeight: 2,
+            display: "flex",
+            flexDirection: "column",
+            rowGap: 15,
+            alignItems: "center",
+          }}
+        >
+          <Fab
+            variant="extended"
+            size="small"
+            aria-label="energy"
+            className="fabText energyBadge"
+          >
+            <span
+              style={{ display: "flex", columnGap: 5, alignItems: "center" }}
+            >
+              <img src={EnergyIcon} width="20px" height="25px" />
+              <span>{`${accDetails.curr_energy} / ${accDetails.max_energy}`}</span>
+            </span>
+          </Fab>
           <Fab
             variant="extended"
             size="small"
@@ -126,7 +152,7 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
             {account}
           </Fab>
         </div>
-        <Tooltip title="Refresh All Accounts">
+        {/* <Tooltip title="Refresh All Accounts">
           <div
             onClick={(item) => updateApp()}
             className={`normalButton`}
@@ -134,7 +160,21 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
           >
             <RefreshIcon />
           </div>
-        </Tooltip>
+        </Tooltip> */}
+        <div
+          className="flx"
+          style={{ flexDirection: "column", alignItems: "center" }}
+        >
+          <div className="flx">
+            <TokenBalances
+              account={account}
+              isCurrentUserUpdateRequested={isCurrentUserUpdateRequested}
+            />
+          </div>
+          <span style={{ color: "crimson", fontSize: "0.8em" }}>
+            Total tokens are after deducting exchange fees from In-Game tokens
+          </span>
+        </div>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         {/* MINING */}
@@ -173,6 +213,7 @@ const LoadAccount = ({ isButtonClicked, updateApp, account }) => {
             updateCropTimeOut={updateCropTimeOut}
             stop={stop}
             account={account}
+            isCurrentUserUpdateRequested={isCurrentUserUpdateRequested}
           />
         </div>
       </div>
