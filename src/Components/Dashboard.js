@@ -25,7 +25,7 @@ if (localStorage.getItem("ids") !== "") {
   DEFAULT_ACCOUNT = [
     // "4rfqu.wam",
     // { account: "irjau.wam", alias: "whale1" },
-    // { account: "wtqxo.wam", alias: "mainAcc" },
+    { account: "wtqxo.wam", alias: "mainAcc" },
     // { account: "uayjo.wam", alias: "shinde24pankaj" },
     // { account: ".c1.s.c.wam", alias: "bsa" },
     // { account: "21l1c.c.wam", alias: "p.p.s" },
