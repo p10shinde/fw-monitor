@@ -19,13 +19,16 @@ import { getExchangeFees, getTokenPrices } from "../Actions/services";
 
 let DEFAULT_ACCOUNT = [];
 const FEE_UPDATE_DURATION = 1; // Fee gets updated every hour
-if (localStorage.getItem("ids") !== "") {
+if (
+  localStorage.getItem("ids") !== "" &&
+  localStorage.getItem("ids") !== null
+) {
   DEFAULT_ACCOUNT = JSON.parse(localStorage.getItem("ids"));
 } else {
   DEFAULT_ACCOUNT = [
     // "4rfqu.wam",
     // { account: "irjau.wam", alias: "whale1" },
-    // { account: "wtqxo.wam", alias: "mainAcc" },
+    { account: "wtqxo.wam", alias: "mainAcc" },
     // { account: "uayjo.wam", alias: "shinde24pankaj" },
     // { account: ".c1.s.c.wam", alias: "bsa" },
     // { account: "21l1c.c.wam", alias: "p.p.s" },
