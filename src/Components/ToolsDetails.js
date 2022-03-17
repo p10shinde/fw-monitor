@@ -4,10 +4,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
+import { Stack } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import _ from "underscore";
 import "../styles/style.css";
-import { getMemberships, getTools } from "../actions/services";
+import { getMemberships, getTools } from "../Actions/services";
 
 import FW_TEMPLATES from "../Utils/Templates";
 // WOOD MEMBERSHIPS
@@ -83,6 +84,7 @@ const ToolsDetails = ({
   const [dense] = React.useState(false);
   const [toolsDetails, setToolsDetails] = useState([]);
   const [toolsLoaded, setToolsLoaded] = useState(false);
+  const [memberships, setMemberships] = useState([]);
 
   useEffect(() => {
     getMemberships(account)
@@ -140,9 +142,10 @@ const ToolsDetails = ({
                   foundGoldMemb.template_name.split(" ")[0].toUpperCase()
                 ] += 1;
               }
-              return 1
+              return 1;
             });
           }
+          setMemberships(membershipData);
         });
 
         getTools(account)
@@ -251,10 +254,25 @@ const ToolsDetails = ({
         console.log(error);
       });
     // }, [toolsLoaded, isButtonClicked]);
-  }, [toolsLoaded, isButtonClicked, isCurrentUserUpdateRequested]);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [toolsLoaded, isButtonClicked, isCurrentUserUpdateRequested]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
+      {/* <List
+        dense={dense}
+        style={{ display: "flex", flexDirection: "row", padding: 0 }}
+      >
+        {memberships.map((mb, index) => (
+          <ListItem key={index} className="membItem">
+            <Avatar
+              className={`avatarCircle`}
+              alt={"Hey"}
+              src={require(`../Assets/images/MBS/B_F_C.png`)}
+            ></Avatar>
+          </ListItem>
+        ))}
+      </List> */}
+
       <List dense={dense}>
         {toolsDetails.map((tool, index) => (
           <ListItem key={index} className="toolItem">
@@ -268,7 +286,7 @@ const ToolsDetails = ({
                     : "goldAvatarCircle"
                 }`}
                 alt={tool.template_name}
-                src={require(`../assets/images/${tool.src}`)}
+                src={require(`../Assets/images/${tool.src}`)}
               ></Avatar>
             </ListItemAvatar>
             <ListItemText

@@ -9,11 +9,11 @@ import {
   objOf,
   apply,
 } from "ramda";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Fab from "@mui/material/Fab";
 import useSound from "use-sound";
-import sirenSfx from "../assets/sounds/siren.wav";
+import sirenSfx from "../Assets/sounds/siren.wav";
 import Grid from "@mui/material/Grid";
 // import * as R from "ramda";
 
@@ -22,6 +22,8 @@ import "../styles/style.css";
 import _, { pick } from "underscore";
 
 import FW_TEMPLATES from "../Utils/Templates";
+import { getCrops } from "../Actions/services";
+import { ReferenceDataContext } from "../Context/ReferenceDataContext";
 
 const CROPS_DETAILS_URL =
   "https://api.wax.alohaeos.com/v1/chain/get_table_rows";
@@ -34,14 +36,15 @@ export default ({
   isAnyCropTimedOut,
   updateCropTimeOut,
   account,
+  isCurrentUserUpdateRequested,
 }) => {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(true);
   const [cropsDetails, setCropsDetails] = useState([]);
   const [cropsLoaded, setCropsLoaded] = useState(false);
   const [cropsCalcDetails, setCropsCalcDetails] = useState({});
-  const [userAccountDetails, setUserAccountDetails] = useState({});
   const [play] = useSound(sirenSfx, { interrupt: false });
+  const { accDetails, setAccDetails } = useContext(ReferenceDataContext);
 
   const updateCropsCalcDetails = (allCrops) => {
     // allCrops.push({
@@ -74,7 +77,8 @@ export default ({
       let foundCropTemplate = _.findWhere(FW_TEMPLATES, {
         template_name: seed,
       });
-      const required_food = remaining_claims * foundCropTemplate.required_food;
+      const required_food =
+        remaining_claims * foundCropTemplate.required_food + 49;
 
       total_claims.push({
         template_name: seed,
@@ -83,7 +87,7 @@ export default ({
         required_food,
       });
     });
-    setCropsCalcDetails({
+    let tst = {
       seeds,
       total_claims_per_seed: TOTAL_CLAIMS_PER_SEED,
       total_claims_completed: _.reduce(
@@ -98,84 +102,67 @@ export default ({
         _.pluck(total_claims, ["required_food"]),
         (memo, num) => memo + num
       ),
-    });
+    };
+    setCropsCalcDetails(tst);
   };
 
   const getRequiredFood = () => {
     const req_food =
       cropsCalcDetails.total_required_food -
-      (userAccountDetails.token_balances?.FOOD +
-        Number(userAccountDetails.energy / 5));
+      (accDetails.tBalances?.FWF?.ingame + Number(accDetails.curr_energy / 5));
+
     return (
       <span style={{ color: "red" }}>
         {req_food > 0 ? (
-          <span style={{ color: "#e53935" }}> ❌  {req_food.toFixed(2)}</span>
+          <span style={{ color: "#e53935" }}> ❌ {req_food.toFixed(2)}</span>
         ) : (
-          <span style={{ color: "#4caf50" }}> ✅  You got real stock.</span>
+          <span style={{ color: "#4caf50" }}> ✅ You got real stock.</span>
         )}
       </span>
     );
   };
 
   useEffect(() => {
-    fetch(USER_ACCOUNT_DETAILS, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: "farmersworld",
-        index_position: 1,
-        json: true,
-        key_type: "i64",
-        limit: 100,
-        lower_bound: account,
-        reverse: false,
-        scope: "farmersworld",
-        show_payer: false,
-        table: "accounts",
-        table_key: "",
-        upper_bound: account,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        let token_balances = {};
-        json.rows[0].balances.forEach((token) => {
-          token_balances[token.split(" ")[1]] = Number(token.split(" ")[0]);
-        });
-        const energy = json.rows[0].energy;
-        const max_energy = json.rows[0].max_energy;
-        setUserAccountDetails({
-          token_balances,
-          energy,
-          max_energy,
-        });
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    // fetch(USER_ACCOUNT_DETAILS, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     code: "farmersworld",
+    //     index_position: 1,
+    //     json: true,
+    //     key_type: "i64",
+    //     limit: 100,
+    //     lower_bound: account,
+    //     reverse: false,
+    //     scope: "farmersworld",
+    //     show_payer: false,
+    //     table: "accounts",
+    //     table_key: "",
+    //     upper_bound: account,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((json) => {
+    //     let token_balances = {};
+    //     json.rows[0]?.balances.forEach((token) => {
+    //       token_balances[token.split(" ")[1]] = Number(token.split(" ")[0]);
+    //     });
+    //     const energy = json.rows[0]?.energy;
+    //     const max_energy = json.rows[0]?.max_energy;
+    //     setUserAccountDetails({
+    //       token_balances,
+    //       energy,
+    //       max_energy,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
 
-    fetch(CROPS_DETAILS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: "farmersworld",
-        index_position: 2,
-        json: true,
-        key_type: "i64",
-        limit: 100,
-        lower_bound: account,
-        reverse: false,
-        scope: "farmersworld",
-        show_payer: false,
-        table: "crops",
-        table_key: "",
-        upper_bound: account,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
+    getCrops(account)
+      .then((cropsData) => {
         let tempCrops = [];
-        json.rows.forEach((crop) => {
+        cropsData.forEach((crop) => {
           //   Find Data
           let foundCropTemplate = _.findWhere(FW_TEMPLATES, {
             template_id: crop["template_id"],
@@ -221,7 +208,7 @@ export default ({
       .catch((error) => {
         console.log(error.message);
       });
-  }, [cropsLoaded, isButtonClicked]);
+  }, [cropsLoaded, isButtonClicked, isCurrentUserUpdateRequested]);
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
@@ -249,7 +236,7 @@ export default ({
                       className={`avatarCircle woodAvatarCircle`}
                       style={{}}
                       alt={crop.template_name}
-                      src={require(`../assets/images/${crop.src}`)}
+                      src={require(`../Assets/images/${crop.src}`)}
                     ></Avatar>
                     <div
                       style={{

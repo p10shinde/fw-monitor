@@ -1,3 +1,25 @@
+.flx {
+  display: flex;
+}
+
+.bgimg {
+  /* background-image: url('../assets/images/paper.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    position: relative;
+    margin: auto;
+    width: 82.4rem;
+    transition: all .2s ease-in-out;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 6;
+    -webkit-animation-name: slideup;
+    animation-name: slideup;
+    height: 53.3584097859rem; */
+}
+
 .miningCategory {
   border: 1px solid transparent;
   margin-top: 10px;
@@ -17,7 +39,7 @@
   background-color: #e0e0e0;
   font-size: 0.675rem !important;
   display: inline-block;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 
 .woodTools {
@@ -102,7 +124,6 @@
 .safeToolTimer {
   background-color: #4caf50 !important;
   font-family: sans-serif !important;
-
 }
 
 .dangerToolTimer {
@@ -114,7 +135,7 @@
   cursor: pointer;
   background: #e0e0e0;
   padding: 4px 7px 0px 7px;
-  border-radius: 4px 
+  border-radius: 4px;
 }
 
 .alarming {
@@ -144,4 +165,57 @@
 .cropsDetails p span {
   color: #ff9800;
   font-weight: 500;
+}
+
+/* ACCOUNT LIST */
+.accountListRenderer button {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* EXCHANGE FEES */
+.fees {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  color: white;
+  font-size: 1.5em;
+  font-weight: 800;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.feesHigh {
+  background-color: crimson;
+}
+
+.feesMed {
+  background-color: #eb805e;
+}
+
+.feesLow {
+  background-color: #ff9800;
+}
+
+.feesLowest {
+  background-color: #009688;
+}
+
+.feeUpdateTimer {
+  background-color: #9c27b0 !important;
+  color: white !important;
+  font-weight: 800 !important;
+  height: 15px !important;
+}
+
+/* TOKEN BALANCES */
+.tokenHeader {
+  color: #4caf50;
+}
+
+.energyBadge {
+  background-color: #fbe840 !important;
+  color: #3c3c3c !important;
+  font-weight: 800 !important;
+  height: 15px !important;
 }

@@ -1,0 +1,15 @@
+export const endpoints = [
+  // "https://api.wax.alohaeos.com/v1/chain/",
+  // "https://wax.greymass.com/v1/chain/",
+  // "https://api.waxsweden.org/v1/chain/",
+  // "https://wax.pink.gg/v1/chain/",
+  // "https://wax.eosphere.io/v1/chain/",
+  // "https://api.wax.greeneosio.com/v1/chain/",
+  // "https://wax.cryptolions.io/v1/chain/",
+  "https://chain.wax.io/v1/chain/",
+  "https://wax.pink.gg/v1/chain/",
+  "https://wax.eosphere.io/v1/chain/",
+  "https://api.waxsweden.org/v1/chain/",
+  "https://wax.eu.eosamsterdam.net/v1/chain/",
+  "https://wax.eosusa.news/v1/chain/",
+];
